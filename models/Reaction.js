@@ -1,10 +1,34 @@
-const { connect, connection } = require ('mongoose');
+const { Schema, model, Types } = require ('mongoose');
+const dateFormat = require('../utils/dateFormat');
 
-const connectionString = process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/studentsDB';
+const ReactionSchema = new Schema (
+    {
+        reactionId: {
+            type: Schema.Types.ObjectId,
+            default: () => new Types.ObjectId(),
+        },
 
-connect(connectionString, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-});
+        reactionBody: {
+            type: String,
+            required: true,
+            maxlength: 280,
+        },
 
-module.exports = connection;
+        username: {
+            type: String,
+            required: true,
+        },
+
+        createdAt: {
+            type: Date,
+            default: Date.now,
+            get: (timestamp) => dateFormat(timestanmp),
+        },
+    },
+    {
+        toJSON: {
+            getters: true,
+        },
+        id: false,
+    }
+);
