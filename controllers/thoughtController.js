@@ -8,10 +8,10 @@ const thoughtController = {
     },
 
     getSingleThought(req, res) {
-        Thought.findOne({ _id: req.params.thoguhtId })
+        Thought.findOne({ _id: req.params.thoughtId })
             .select('-__v')
-            .then((course) =>
-                !course
+            .then((thought) =>
+                !thought
                     ? res.status(404).json({
                         message: 'No thought with that ID.'
                     })
@@ -29,10 +29,10 @@ const thoughtController = {
             });
     },
 
-    updateThought(req, res) {
+    updateThought({ params, body }, res) {
         Thought.findOneAndUpdate(
-            { _id: req.params.thoughtId },
-            { $update: { thoughts: req.body } },
+            { _id: params.thoughtId }, 
+            body,
             { runValidators: true, new: true }
         )
             .then((thought) =>
@@ -75,7 +75,7 @@ const thoughtController = {
         console.log('You are adding a reaction.');
         console.log(req.body);
         Thought.findOneAndUpdate(
-            { _id: req.params.studentId },
+            { _id: req.params.thoughtId },
             { $addToSet: { reactions: req.body } },
             { runValidators: true, new: true }
         )
@@ -89,11 +89,13 @@ const thoughtController = {
             .catch((err) => res.status(500).json(err));
     },
 
-    removeReaction(req, res) {
+    removeReaction({ params }, res) {
+        console.log('You are removing a reaction.');
+        console.log(params.reactionId);
         Thought.findOneAndUpdate(
-            { _id: req.params.studentId },
-            { $pull: { reaction: { reactionId: req.params.reactionId } } },
-            { runValidators: true, new: true }
+            { _id: params.thoughtId },
+            { $pull: { reactions: { reactionId: params.reactionId} } },
+            { new: true }
         )
             .then((thought) =>
                 !thought
