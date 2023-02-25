@@ -30,7 +30,7 @@ npm start
 
 #### Walkthrough Video
 
-[Click to see the demo video!](www.linkgoeshere.com)
+[Click to see the demo video!](https://youtu.be/e4EPr7UKLyM)
 
 
 ## License
